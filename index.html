@@ -67,6 +67,19 @@
         <figure id="Location1"></figure> <!-- we give it an id so we can put a vega-lite graph here with VegaEmbed -->
     </section>
 
+    <!-- Chart 2 -->
+<section>
+    <div class="chart-description">
+        <h2>Chart 2: Another Chart</h2>
+        <p>Description here</p>
+    </div>
+    <figure id="chart2"></figure>
+</section>
+
+<script>
+    vegaEmbed('#chart2', 'shiller_pe_ratio.json');
+</script>
+
     <!-- Do you want to add more sections? -->
         <!-- Try copying pasting the section above -->
         <!-- You'll need to change the id of the figure "<figure id="Location3"... -->
