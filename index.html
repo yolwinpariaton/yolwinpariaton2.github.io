@@ -48,7 +48,7 @@
     </h1>
     <p style="margin-top: 0px; color: darkblue">
         <!-- we're setting the margin to 0px so the header and authour name are close together -->
-        Yolwin Pariaton | <a href="https://www.linkedin.com/in/YOUR_LINKEDIN/">LinkedIn</a> | <a
+        Yolwin Pariaton | <a href="https://www.linkedin.com/in/YOUR_LINKEDIN/">LinkedIn</a> | 
             href="https://www.github.com/YOUR_GITHUB">GitHub</a>
     </p>
     <h3 class="small"> <!-- We have added a class to the header called "small" which we can use to style it in the CSS -->
@@ -68,77 +68,130 @@
     </section>
 
     <!-- Chart 2 -->
-<section>
-    <div class="chart-description">
-        <h2>Chart 2: Another Chart</h2>
-        <p>Description here</p>
-    </div>
-    <figure id="chart2"></figure>
-</section>
+    <section>
+        <div class="chart-description">
+            <h2>Chart 2: Another Chart</h2>
+            <p>Description here</p>
+        </div>
+        <figure id="chart2"></figure>
+    </section>
 
-<!DOCTYPE html>
-<html>
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-</head>
-<body>
-  <div id="vis"></div>
-  
-  <script type="text/javascript">
-    var spec = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "title": {
-        "text": "Fertility rate, total (births per woman) - Peru and Chile",
-        "fontSize": 16,
-        "font": "Arial"
-      },
-      "width": 700,
-      "height": 400,
-      "data": {
-        "url": "https://api.worldbank.org/v2/country/PE;CL/indicator/SP.DYN.TFRT.IN?format=json&per_page=200&date=1960:2023",
-        "format": {
-          "type": "json",
-          "property": "[1]"
-        }
-      },
-      // ... rest of your specification
-    };
-    
-    vegaEmbed('#vis', spec);
-  </script>
-</body>
-</html>
-    
-
-
-    
-<script>
-    vegaEmbed('#chart2', 'shiller_pe_ratio_chart.json');
-</script>
+    <!-- Chart 3: Fertility Rates -->
+    <section>
+        <div class="chart-description">
+            <h2>Chart 3: Fertility Rate Comparison - Peru and Chile</h2>
+            <p>This chart shows the dramatic decline in fertility rates for Peru and Chile from 1960 to 2023. Both countries experienced significant demographic transitions, with Peru starting from a higher peak of around 6.9 children per woman in the 1960s, while Chile began at approximately 5.5. The convergence of these rates over time reflects similar socioeconomic development patterns across Latin America.</p>
+        </div>
+        <figure id="fertility-chart"></figure>
+    </section>
 
     <!-- Do you want to add more sections? -->
         <!-- Try copying pasting the section above -->
         <!-- You'll need to change the id of the figure "<figure id="Location3"... -->
         <!-- ... and add a new variable for the graph spec in the script at the bottom of the page -->
 
-
     <!-- This is a script, it's a way to run JavaScript code on the page -->
     <script>
         // This is a comment in JavaScript - it's a different language to HTML and CSS
 
+        // Chart 1
         let figure_1_spec = "https://raw.githubusercontent.com/EconomicsObservatory/courses/main/2/s2_chart2.json"; // We're storing the URL of the graph we want to display in a variable
-                                                                                                                    // You should have a spec for a graph in this same folder. Just specify its name here, e.g. let figure_1_spec = "chart1.json"
+        vegaEmbed('#Location1', figure_1_spec); // We're using the vegaEmbed function to put a graph in the element with id figure_1
 
-        vegaEmbed('#Location1', figure_1_spec) // We're using the vegaEmbed function to put a graph in the element with id figure_1
+        // Chart 2
+        vegaEmbed('#chart2', 'shiller_pe_ratio_chart.json');
+
+        // Chart 3: Fertility Rate Comparison
+        let fertilitySpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": {
+                "text": "Fertility rate, total (births per woman) - Peru and Chile",
+                "fontSize": 16,
+                "font": "Arial"
+            },
+            "width": 700,
+            "height": 400,
+            "data": {
+                "url": "https://api.worldbank.org/v2/country/PE;CL/indicator/SP.DYN.TFRT.IN?format=json&per_page=200&date=1960:2023",
+                "format": {
+                    "type": "json",
+                    "property": "[1]"
+                }
+            },
+            "transform": [
+                {"filter": "datum.value != null"}
+            ],
+            "mark": {
+                "type": "line",
+                "point": true,
+                "strokeWidth": 2.5
+            },
+            "encoding": {
+                "x": {
+                    "field": "date",
+                    "type": "temporal",
+                    "axis": {
+                        "title": null,
+                        "format": "%Y",
+                        "labelAngle": 0,
+                        "grid": true,
+                        "gridColor": "#e0e0e0",
+                        "tickCount": 10
+                    },
+                    "scale": {
+                        "domain": ["1960", "2023"]
+                    }
+                },
+                "y": {
+                    "field": "value",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": null,
+                        "grid": true,
+                        "gridColor": "#e0e0e0",
+                        "format": ".1f"
+                    },
+                    "scale": {
+                        "domain": [0, 7]
+                    }
+                },
+                "color": {
+                    "field": "country.value",
+                    "type": "nominal",
+                    "scale": {
+                        "domain": ["Peru", "Chile"],
+                        "range": ["#4472C4", "#ED7D31"]
+                    },
+                    "legend": {
+                        "title": "Country",
+                        "orient": "top-right",
+                        "offset": 10
+                    }
+                },
+                "tooltip": [
+                    {"field": "country.value", "type": "nominal", "title": "Country"},
+                    {"field": "date", "type": "temporal", "format": "%Y", "title": "Year"},
+                    {"field": "value", "type": "quantitative", "format": ".2f", "title": "Fertility Rate"}
+                ]
+            },
+            "config": {
+                "view": {
+                    "stroke": "transparent"
+                },
+                "axis": {
+                    "domainColor": "#333",
+                    "tickColor": "#333"
+                }
+            }
+        };
+
+        vegaEmbed('#fertility-chart', fertilitySpec);
 
         // Do you want to add more graphs?
-        // try defining a new variable for figure_3_spec, adding VegaEmbed for Location3, and adding a new section in the HTML
+        // try defining a new variable for figure_4_spec, adding VegaEmbed for Location4, and adding a new section in the HTML
         // e.g. 
-        // let figure_3_spec = ...
-        // vegaEmbed('#Location3', figure_3_spec)
-
+        // let figure_4_spec = ...
+        // vegaEmbed('#Location4', figure_4_spec)
 
     </script>
 
