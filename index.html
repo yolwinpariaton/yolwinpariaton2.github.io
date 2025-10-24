@@ -76,6 +76,44 @@
     <figure id="chart2"></figure>
 </section>
 
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  
+  <script type="text/javascript">
+    var spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": {
+        "text": "Fertility rate, total (births per woman) - Peru and Chile",
+        "fontSize": 16,
+        "font": "Arial"
+      },
+      "width": 700,
+      "height": 400,
+      "data": {
+        "url": "https://api.worldbank.org/v2/country/PE;CL/indicator/SP.DYN.TFRT.IN?format=json&per_page=200&date=1960:2023",
+        "format": {
+          "type": "json",
+          "property": "[1]"
+        }
+      },
+      // ... rest of your specification
+    };
+    
+    vegaEmbed('#vis', spec);
+  </script>
+</body>
+</html>
+    
+
+
+    
 <script>
     vegaEmbed('#chart2', 'shiller_pe_ratio_chart.json');
 </script>
